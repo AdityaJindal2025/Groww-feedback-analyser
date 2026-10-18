@@ -1,0 +1,72 @@
+{
+  "_note": "Synthetic. Fixed proposal for the discover stage.",
+  "response": {
+    "themes": [
+      {
+        "id": "withdrawals_payments",
+        "name": "Withdrawals & Payments",
+        "definition": "Adding money, withdrawing to the bank, UPI and settlement delays.",
+        "includes": [
+          "withdrawal pending",
+          "UPI add-money failure",
+          "refund delays"
+        ],
+        "excludes": [
+          "brokerage or fees (charges_brokerage)"
+        ]
+      },
+      {
+        "id": "app_performance",
+        "name": "App Performance & Orders",
+        "definition": "Crashes, slowness, login failures and order execution problems, especially in market hours.",
+        "includes": [
+          "app hangs at market open",
+          "order rejected or stuck",
+          "chart lag"
+        ],
+        "excludes": [
+          "support response time (customer_support)"
+        ]
+      },
+      {
+        "id": "charges_brokerage",
+        "name": "Charges & Brokerage",
+        "definition": "Brokerage, hidden fees, taxes and pricing compared with other brokers.",
+        "includes": [
+          "high brokerage",
+          "unexpected charges",
+          "DP charges"
+        ],
+        "excludes": [
+          "failed withdrawals (withdrawals_payments)"
+        ]
+      },
+      {
+        "id": "customer_support",
+        "name": "Customer Support",
+        "definition": "Reaching support and the quality of help received.",
+        "includes": [
+          "no reply to tickets",
+          "chat bot loops",
+          "slow resolution"
+        ],
+        "excludes": [
+          "the underlying app bug (app_performance)"
+        ]
+      },
+      {
+        "id": "kyc_onboarding",
+        "name": "KYC & Onboarding",
+        "definition": "Account opening, KYC verification, e-sign and bank linking.",
+        "includes": [
+          "KYC rejected",
+          "e-sign failure",
+          "bank account linking"
+        ],
+        "excludes": [
+          "withdrawals after onboarding (withdrawals_payments)"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "_note": "Synthetic. Quotes the first candidate of each theme verbatim.",
+  "pick_first_candidate": true,
+  "max_words": 20
+}

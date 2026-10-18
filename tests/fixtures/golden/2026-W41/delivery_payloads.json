@@ -1,0 +1,134 @@
+[
+  {
+    "part": "doc:info",
+    "op": "docs.info",
+    "args": {
+      "document": "<PULSE_DOC_ID>",
+      "tail_chars": 5000
+    }
+  },
+  {
+    "part": "doc:title",
+    "op": "docs.append_text",
+    "args": {
+      "document": "<PULSE_DOC_ID>",
+      "text": "Groww Review Pulse — Week of 05 Oct 2026",
+      "paragraph_style": "HEADING_1",
+      "start_on_new_line": true,
+      "client_request_id": "pulse:2026-W41:323353e73f7f:title"
+    }
+  },
+  {
+    "part": "doc:source",
+    "op": "docs.append_text",
+    "args": {
+      "document": "<PULSE_DOC_ID>",
+      "text": "Source: 54 English Play Store reviews (9+ words), 20 Jul – 11 Oct 2026 | Avg 1.9★",
+      "paragraph_style": "NORMAL_TEXT",
+      "start_on_new_line": true,
+      "client_request_id": "pulse:2026-W41:323353e73f7f:source"
+    }
+  },
+  {
+    "part": "doc:themes_heading",
+    "op": "docs.append_text",
+    "args": {
+      "document": "<PULSE_DOC_ID>",
+      "text": "Top themes",
+      "paragraph_style": "HEADING_2",
+      "start_on_new_line": true,
+      "client_request_id": "pulse:2026-W41:323353e73f7f:themes_heading"
+    }
+  },
+  {
+    "part": "doc:themes_table",
+    "op": "docs.append_table",
+    "args": {
+      "document": "<PULSE_DOC_ID>",
+      "rows": [
+        [
+          "Theme",
+          "Share",
+          "Trend",
+          "Takeaway"
+        ],
+        [
+          "Withdrawals & Payments",
+          "28%",
+          "",
+          "Withdrawals stall for days with no status shown"
+        ],
+        [
+          "App Performance & Orders",
+          "22%",
+          "",
+          "App freezes at market open, orders get stuck"
+        ],
+        [
+          "Charges & Brokerage",
+          "17%",
+          "",
+          "Small investors find brokerage and fees too high"
+        ]
+      ],
+      "client_request_id": "pulse:2026-W41:323353e73f7f:themes_table"
+    }
+  },
+  {
+    "part": "doc:quotes_heading",
+    "op": "docs.append_text",
+    "args": {
+      "document": "<PULSE_DOC_ID>",
+      "text": "What users said",
+      "paragraph_style": "HEADING_2",
+      "start_on_new_line": true,
+      "client_request_id": "pulse:2026-W41:323353e73f7f:quotes_heading"
+    }
+  },
+  {
+    "part": "doc:quotes",
+    "op": "docs.append_text",
+    "args": {
+      "document": "<PULSE_DOC_ID>",
+      "text": "\"Withdrawal request has been pending for five days and the app shows no status at all\" — 1★, Withdrawals & Payments\n\"The chart takes ages to load and freezes when I switch between time frames\" — 2★, App Performance & Orders\n\"The pledge charges are much higher here than on other platforms I have used\" — 1★, Charges & Brokerage",
+      "paragraph_style": "NORMAL_TEXT",
+      "start_on_new_line": true,
+      "client_request_id": "pulse:2026-W41:323353e73f7f:quotes"
+    }
+  },
+  {
+    "part": "doc:actions_heading",
+    "op": "docs.append_text",
+    "args": {
+      "document": "<PULSE_DOC_ID>",
+      "text": "Action ideas",
+      "paragraph_style": "HEADING_2",
+      "start_on_new_line": true,
+      "client_request_id": "pulse:2026-W41:323353e73f7f:actions_heading"
+    }
+  },
+  {
+    "part": "doc:actions",
+    "op": "docs.append_text",
+    "args": {
+      "document": "<PULSE_DOC_ID>",
+      "text": "1. Add an in-app withdrawal tracker with expected credit time\n2. Load-test order placement for the 9:15 market-open spike\n3. Show a per-order charges breakdown before users confirm a trade",
+      "paragraph_style": "NORMAL_TEXT",
+      "start_on_new_line": true,
+      "client_request_id": "pulse:2026-W41:323353e73f7f:actions"
+    }
+  },
+  {
+    "part": "draft",
+    "op": "gmail.create_draft",
+    "args": {
+      "to": [
+        "<PULSE_RECIPIENT>"
+      ],
+      "subject": "Groww Review Pulse — Week of 05 Oct 2026",
+      "body": "Groww Review Pulse — Week of 05 Oct 2026\nSource: 54 English Play Store reviews (9+ words), 20 Jul – 11 Oct 2026 | Avg 1.9★\n\nTOP THEMES\n1. Withdrawals & Payments — 28% of reviews: Withdrawals stall for days with no status shown\n2. App Performance & Orders — 22% of reviews: App freezes at market open, orders get stuck\n3. Charges & Brokerage — 17% of reviews: Small investors find brokerage and fees too high\n\nWHAT USERS SAID\n• \"Withdrawal request has been pending for five days and the app shows no status at all\" — 1★, Withdrawals & Payments\n• \"The chart takes ages to load and freezes when I switch between time frames\" — 2★, App Performance & Orders\n• \"The pledge charges are much higher here than on other platforms I have used\" — 1★, Charges & Brokerage\n\nACTION IDEAS\n1. Add an in-app withdrawal tracker with expected credit time\n2. Load-test order placement for the 9:15 market-open spike\n3. Show a per-order charges breakdown before users confirm a trade\n\nFull pulse: https://docs.google.com/document/d/<PULSE_DOC_ID>/edit",
+      "body_format": "text",
+      "client_request_id": "pulse:2026-W41:draft:01c68ca1482b"
+    }
+  }
+]

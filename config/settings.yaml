@@ -1,0 +1,74 @@
+# Pipeline settings (arch §8). Secrets are never stored here; `${VAR}` reads the environment.
+
+app:
+  name: Groww
+  play_store: { package_id: com.nextbillion.groww, lang: en, country: in }
+
+sources:
+  play_store:
+    enabled: true
+    page_size: 200              # reviews per request
+    page_delay_seconds: 1.5     # politeness delay between pages
+    max_reviews: 30000          # hard cap per ingest run (~2x the 12-week volume, see Docs/spikes.md)
+  csv:
+    enabled: false
+    path: null                  # local CSV, JSON or JSONL export of public reviews
+    store: csv
+    timezone: Asia/Kolkata      # applied to dates without an offset
+    date_format: null           # strptime format; null means ISO 8601
+    columns:                    # pipeline field -> column name in the file
+      text: text
+      rating: rating
+      review_date: date
+  filters:                      # applied at ingest; reviews that fail are never stored
+    min_words: 9                # keep only reviews with more than 8 words
+    drop_emoji: true            # drop any review containing an emoji
+    english_only: true          # drop non-Latin scripts and Hinglish
+
+window:
+  weeks: 12                     # 8–12
+  timezone: Asia/Kolkata
+  ranking_scope: window         # window | latest_week
+
+analysis:
+  max_themes: 5
+  top_themes: 3
+  min_words_to_classify: 4
+  other_share_alert: 0.25
+  quote_languages: [en]
+  min_trend_count: 10           # no ▲/▼ for a theme with fewer latest-week reviews
+  coverage_sample_size: 200     # stratified sample for the discovery coverage check and hand-labelling
+  coverage_min_per_rating: 15
+  quote_candidates: 15
+  quote_candidate_max_words: 60
+
+pulse:
+  max_words: 250
+  quote_max_words: 30
+  takeaway_max_words: 12
+  action_max_words: 20
+  recipient: ${PULSE_RECIPIENT}
+
+llm:
+  discover: { model: claude-opus-5-5, effort: high }
+  classify: { model: claude-opus-5-5, effort: low, max_tokens: 4000, use_batches: false, batch_threshold: 200, chunk_size: 50 }
+  quotes:   { model: claude-opus-5-5, effort: medium }
+  compose:  { model: claude-opus-5-5, effort: high }
+
+delivery:
+  # Our gmail-docs-mcp server on Railway (Streamable HTTP, bearer token). Google credentials
+  # live on the server; this repo only holds the bearer token, in .env.
+  mcp: { url: "https://mcp-server-production-64cb.up.railway.app/mcp", token: "${PULSE_MCP_TOKEN}", timeout_seconds: 60 }
+  docs:
+    document: ${PULSE_DOC_ID}     # the running pulse Doc (URL or ID); each week appends a section
+    title: "Groww Review Pulse — Week of {week_start:%d %b %Y}"
+    tools: { info: gdocs_get_document_info, append_text: gdocs_append_text, append_table: gdocs_append_table }
+  gmail:
+    subject: "Groww Review Pulse — Week of {week_start:%d %b %Y}"
+    tools: { create_draft: gmail_create_draft }   # never a send tool; the client refuses those
+
+paths:
+  db: data/pulse.db
+  runs: runs
+  prompts: prompts
+  themes: config/themes.yaml

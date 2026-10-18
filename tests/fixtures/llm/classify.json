@@ -1,0 +1,63 @@
+{
+  "_note": "Synthetic. Labels any chunk by keyword; sentiment from rating.",
+  "label_rules": {
+    "themes": [
+      {
+        "theme_id": "withdrawals_payments",
+        "keywords": [
+          "withdraw",
+          "upi",
+          "refund",
+          "add money",
+          "bank transfer"
+        ]
+      },
+      {
+        "theme_id": "kyc_onboarding",
+        "keywords": [
+          "kyc",
+          "e-sign",
+          "account opening",
+          "verification"
+        ]
+      },
+      {
+        "theme_id": "charges_brokerage",
+        "keywords": [
+          "brokerage",
+          "brokrage",
+          "charges",
+          "fees",
+          "tax"
+        ]
+      },
+      {
+        "theme_id": "customer_support",
+        "keywords": [
+          "support",
+          "custmer",
+          "customer care",
+          "ticket",
+          "no reply"
+        ]
+      },
+      {
+        "theme_id": "app_performance",
+        "keywords": [
+          "crash",
+          "slow",
+          "hang",
+          "lag",
+          "order",
+          "login",
+          "chart"
+        ]
+      }
+    ],
+    "default_theme": "other",
+    "person_markers": [
+      "from support named",
+      "agent named"
+    ]
+  }
+}

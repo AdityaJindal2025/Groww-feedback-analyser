@@ -1,0 +1,23 @@
+# Local data: may hold review text; never commit
+data/
+runs/
+*.db
+spikes/output/
+
+# Secrets
+.env
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+
+# Coverage data
+.coverage
+.coverage.*

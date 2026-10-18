@@ -1,0 +1,33 @@
+{
+  "_note": "Synthetic. Fixed takeaways and actions.",
+  "response": {
+    "takeaways": [
+      {
+        "theme_id": "withdrawals_payments",
+        "text": "Withdrawals stall for days with no status shown"
+      },
+      {
+        "theme_id": "app_performance",
+        "text": "App freezes at market open, orders get stuck"
+      },
+      {
+        "theme_id": "charges_brokerage",
+        "text": "Small investors find brokerage and fees too high"
+      }
+    ],
+    "actions": [
+      {
+        "theme_id": "withdrawals_payments",
+        "text": "Add an in-app withdrawal tracker with expected credit time"
+      },
+      {
+        "theme_id": "app_performance",
+        "text": "Load-test order placement for the 9:15 market-open spike"
+      },
+      {
+        "theme_id": "charges_brokerage",
+        "text": "Show a per-order charges breakdown before users confirm a trade"
+      }
+    ]
+  }
+}

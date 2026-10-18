@@ -1,0 +1,19 @@
+# {{ title }}
+
+**Source:** {{ source }}
+
+## Top themes
+
+{% for t in themes -%}
+{{ loop.index }}. **{{ t.name }}** — {{ t.share_pct }}% of reviews{{ t.marker }}: {{ t.takeaway }}
+{% endfor %}
+## What users said
+
+{% for q in quotes -%}
+- "{{ q.quote }}" — {{ q.rating }}★, {{ q.theme_name }}
+{% endfor %}
+## Action ideas
+
+{% for a in actions -%}
+{{ loop.index }}. {{ a.text }}
+{% endfor -%}

@@ -1,0 +1,489 @@
+[
+  {
+    "name": "gmail_send_email",
+    "description": "Send an email from the connected Gmail account. This sends immediately and cannot be undone. If the user has not clearly stated the recipients and content, confirm with them first. Set dry_run to true to preview without sending.",
+    "annotations": {
+      "title": "Send email",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "input_schema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "to": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Recipient email addresses, e.g. [\"alex@example.com\"]. At least one."
+        },
+        "cc": {
+          "description": "Optional CC addresses.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bcc": {
+          "description": "Optional BCC addresses.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject line, plain text, max 250 characters."
+        },
+        "body": {
+          "type": "string",
+          "description": "Email body. Plain text unless body_format is 'html'."
+        },
+        "body_format": {
+          "description": "Format of body. Default 'text'.",
+          "type": "string",
+          "enum": [
+            "text",
+            "html"
+          ]
+        },
+        "client_request_id": {
+          "description": "Optional unique ID for this request (max 128 characters). If the same ID is sent again within 24 hours, the original result is returned instead of repeating the action.",
+          "type": "string",
+          "maxLength": 128
+        },
+        "dry_run": {
+          "description": "If true, validate and return the composed email without sending. Default false.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "to",
+        "subject",
+        "body"
+      ]
+    },
+    "output_schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "sent",
+            "dry_run"
+          ]
+        },
+        "message_id": {
+          "type": "string"
+        },
+        "thread_id": {
+          "type": "string"
+        },
+        "to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cc": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bcc_count": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "subject": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "message_id",
+        "thread_id",
+        "to",
+        "cc",
+        "bcc_count",
+        "subject"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "gdocs_get_document_info",
+    "description": "Get the title, tabs and the last part of an existing Google Doc. Use this to confirm you have the right document before appending to it. Returns the last 500 characters by default.",
+    "annotations": {
+      "title": "Get Google Doc info",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    },
+    "input_schema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "document": {
+          "type": "string",
+          "description": "Google Doc URL or document ID."
+        },
+        "tail_chars": {
+          "description": "How many characters from the end of the doc to return (default 500, max 5000).",
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "document"
+      ]
+    },
+    "output_schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "revision_id": {
+          "type": "string"
+        },
+        "tabs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "tab_id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "tab_id",
+              "title"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "end_index": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "tail_text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_id",
+        "title",
+        "url",
+        "revision_id",
+        "tabs",
+        "end_index",
+        "tail_text"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "gdocs_append_text",
+    "description": "Append text to the end of an existing Google Doc. Never modifies or removes existing content. Starts a new paragraph by default.",
+    "annotations": {
+      "title": "Append to Google Doc",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "input_schema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "document": {
+          "type": "string",
+          "description": "Google Doc URL or document ID."
+        },
+        "text": {
+          "type": "string",
+          "description": "Text to append. Use \\n for line breaks."
+        },
+        "tab_id": {
+          "description": "Optional tab ID for docs that use tabs. Defaults to the tab in the URL, else the first tab.",
+          "type": "string"
+        },
+        "start_on_new_line": {
+          "description": "If true (default), the text starts as a new paragraph.",
+          "type": "boolean"
+        },
+        "paragraph_style": {
+          "description": "Optional style applied to the appended paragraphs (P1).",
+          "type": "string",
+          "enum": [
+            "NORMAL_TEXT",
+            "TITLE",
+            "HEADING_1",
+            "HEADING_2",
+            "HEADING_3"
+          ]
+        },
+        "client_request_id": {
+          "description": "Optional unique ID for this request (max 128 characters). If the same ID is sent again within 24 hours, the original result is returned instead of repeating the action.",
+          "type": "string",
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "document",
+        "text"
+      ]
+    },
+    "output_schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "tab_id": {
+          "type": "string"
+        },
+        "inserted_chars": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "start_index": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "end_index": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "revision_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_id",
+        "title",
+        "url",
+        "tab_id",
+        "inserted_chars",
+        "start_index",
+        "end_index",
+        "revision_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "gdocs_append_table",
+    "description": "Append a table to the end of an existing Google Doc; the first row is the header and is bold by default. Never modifies or removes existing content. Use gdocs_append_text for plain text.",
+    "annotations": {
+      "title": "Append table to Google Doc",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "input_schema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "document": {
+          "type": "string",
+          "description": "Google Doc URL or document ID."
+        },
+        "rows": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": "Table rows as arrays of cell strings; the first row is the header. Shorter rows are padded with empty cells."
+        },
+        "bold_header": {
+          "description": "If true (default), the header row is bold.",
+          "type": "boolean"
+        },
+        "tab_id": {
+          "description": "Optional tab ID for docs that use tabs. Defaults to the tab in the URL, else the first tab.",
+          "type": "string"
+        },
+        "client_request_id": {
+          "description": "Optional unique ID for this request (max 128 characters). If the same ID is sent again within 24 hours, the original result is returned instead of repeating the action.",
+          "type": "string",
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "document",
+        "rows"
+      ]
+    },
+    "output_schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "tab_id": {
+          "type": "string"
+        },
+        "row_count": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "column_count": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "start_index": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "end_index": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "revision_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_id",
+        "title",
+        "url",
+        "tab_id",
+        "row_count",
+        "column_count",
+        "start_index",
+        "end_index",
+        "revision_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "gmail_create_draft",
+    "description": "Create a draft email in the connected Gmail account without sending it, so the user can review and send it themselves. Use this instead of gmail_send_email when the user wants to review first.",
+    "annotations": {
+      "title": "Create email draft",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "input_schema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "to": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Recipient email addresses, e.g. [\"alex@example.com\"]. At least one."
+        },
+        "cc": {
+          "description": "Optional CC addresses.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bcc": {
+          "description": "Optional BCC addresses.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject line, plain text, max 250 characters."
+        },
+        "body": {
+          "type": "string",
+          "description": "Email body. Plain text unless body_format is 'html'."
+        },
+        "body_format": {
+          "description": "Format of body. Default 'text'.",
+          "type": "string",
+          "enum": [
+            "text",
+            "html"
+          ]
+        },
+        "client_request_id": {
+          "description": "Optional unique ID for this request (max 128 characters). If the same ID is sent again within 24 hours, the original result is returned instead of repeating the action.",
+          "type": "string",
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "to",
+        "subject",
+        "body"
+      ]
+    },
+    "output_schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "draft_id": {
+          "type": "string"
+        },
+        "message_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "draft_id",
+        "message_id"
+      ],
+      "additionalProperties": false
+    }
+  }
+]

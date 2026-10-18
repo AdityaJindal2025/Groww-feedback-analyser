@@ -1,0 +1,74 @@
+[project]
+name = "pulse"
+version = "0.1.0"
+description = "Weekly Groww Play Store review pulse: ingest, theme, summarise, deliver via MCP"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.60",
+    "mcp>=1.10",
+    "google-play-scraper>=1.2.7",
+    "pydantic>=2.11",
+    "pyyaml>=6.0",
+    "jinja2>=3.1",
+    "typer>=0.15",
+    "python-dotenv>=1.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.25",
+    "pytest-cov>=6.0",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "types-pyyaml>=6.0",
+]
+
+[project.scripts]
+pulse = "pulse.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pulse"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-m 'not live'"
+markers = ["live: calls real external services; run with `pytest -m live`"]
+asyncio_default_fixture_loop_scope = "function"
+
+# T9.3: `pytest --cov` measures the non-I/O modules and fails below 85%.
+[tool.coverage.run]
+source = [
+    "pulse.privacy",
+    "pulse.analysis",
+    "pulse.compose",
+    "pulse.validate",
+    "pulse.timeutil",
+]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["spikes/output", "*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src"]
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["google_play_scraper", "google_play_scraper.*"]
+ignore_missing_imports = true
